@@ -1,0 +1,16 @@
+<footer class="border-top text-center py-3">
+  {% with request.resolver_match.view_name as view_name %}
+    
+      
+            <a class="nav-link {% if view_name == 'pages:about' %} text-white {% endif %}" href="{% url 'pages:about' %}">
+              О проекте
+            </a>
+      
+         
+            <a class="nav-link {% if view_name == 'pages:rules' %} text-white {% endif %}" href="{% url 'pages:rules' %}">
+              Правила
+            </a>
+      
+  <p>© PillBoxTracker</p>    
+  {% endwith %}
+</footer>
