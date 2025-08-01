@@ -6,8 +6,8 @@
     <div class="card-header bg-success bg-opacity-25">
       Регистрация пользователя
     </div>
-    <div class="card-body bg-success bg-opacity-10">
-      <form method="post">
+    <div class="card-body">
+      <form method="post" style="text-bg-primary">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% bootstrap_button button_type="submit" content="Зарегистрироваться" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 12px 24px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;" %}

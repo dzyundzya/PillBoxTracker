@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="col d-flex justify-content-center">
+    <div class="card" style="width: 40rem;">
+      <div class="card-header">
+        Вы вышли из системы!
+      </div>
+      <div class="card-body">
+        <p><a href="{% url 'login' %}" class="btn" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 6px 25px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          Войти снова
+        </a></p>
+        <a href="{% url 'pages:homepage' %}" class="btn" style="background-color: rgba(29, 122, 144, 0.50); color: white; padding: 6px 25px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+          На главную
+        </a>
+      </div>
+    </div>
+  </div>
+{% endblock %}

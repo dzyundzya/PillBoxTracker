@@ -1,11 +1,19 @@
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
 
+from .constants import PagesConstants as const
 from .models import Accordion
+from pillbox.models import Pill
+from pillbox.utils import comment_count, pill_filter
 
 
-class HomePage(TemplateView):
+class HomePage(ListView):
+    model = Pill
     template_name = 'pages/homepage.html'
+    paginate_by = const.PAGINATION
+
+    def get_queryset(self):
+        return comment_count(pill_filter(Pill.objects)).order_by('-pub_date')
 
 
 class Rules(TemplateView):

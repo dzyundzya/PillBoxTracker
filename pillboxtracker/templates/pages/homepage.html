@@ -3,9 +3,9 @@
   Лента записей
 {% endblock %}
 {% block content %}
-  {% for post in page_obj %}
+  {% for pill in page_obj %}
     <article class="mb-5">
-      {% include "includes/post_card.html" %}
+      {% include "includes/pill_card.html" %}
     </article>
   {% endfor %}
   {% include "includes/paginator.html" %}
