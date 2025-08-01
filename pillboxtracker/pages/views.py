@@ -1,14 +1,20 @@
 from django.shortcuts import render
 from django.views.generic import ListView, TemplateView
 
+from .models import Accordion
+
 
 class HomePage(TemplateView):
     template_name = 'pages/homepage.html'
 
 
-
 class Rules(TemplateView):
     template_name = 'pages/rules.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tabs"] = Accordion.objects.all()
+        return context
 
 
 class About(TemplateView):

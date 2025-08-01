@@ -49,15 +49,13 @@ class CustomUser(AbstractUser):
         blank=True, help_text=uc.HELP_TEXT.BIO
     )
     birthday = models.DateField(
-        'Дата рождения',
+        'Дата рождения', blank=True, null=True,
         help_text=uc.HELP_TEXT.BIRTHDAY
     )
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = [
         'username',
-        'first_name',
-        'last_name'
     ]
 
     class Meta:
