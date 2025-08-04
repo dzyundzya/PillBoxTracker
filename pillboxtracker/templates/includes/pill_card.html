@@ -1,0 +1,46 @@
+<div class="col d-flex justify-content-center">
+  <div class="card aspect-ratio" style="width: 40rem;">
+    <div class="card-body">
+      {% if pill.image %}
+        <a href="{{ pill.image.url }}" target="_blank">
+          <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ pill.image.url }}">
+        </a>
+      {% endif %}
+      <h3 class="card-title">{{ pill.name }}</h3>
+      <h6 class="card-subtitle mb-2 text-muted">
+        <small>
+          {% if not pill.is_published %}
+            <p class="text-danger">Препарат снят с публикации админом</p>
+          {% elif not pill.category.is_published %}
+            <p class="text-danger">Выбранная категория снята с публикации админом</p>
+          {% endif %}
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Активное вещество</th>
+                <th>Форма выпуска</th>
+                <th>Производитель</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{{ pill.display_active_substance }}</td>
+                <td>{{ pill.medicine_form }}</td>
+                <td>{{ pill.manufacturer }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </small>
+      </h6>
+      <p class="card-text">{{ pill.description|truncatewords:10 }}</p>
+      <a href="{% url 'pillbox:pill_detail' pill.id %}" class="btn" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 4px 8px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+        Перейти к препарату  
+      </a>
+      <a href="{% url 'pillbox:pill_detail' pill.id %}" class="btn" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 4px 8px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+        Комментарии ({{ pill.comment_count }}) 
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ЛАЙКИ ЦВЕТ 237 145 33-->

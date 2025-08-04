@@ -26,6 +26,7 @@
           {% csrf_token %}
           {% if not '/delete/' in request.path %}
             {% bootstrap_form form %}
+            {% bootstrap_button button_type="submit" content="Отправить" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 6px 25px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;" %}
           {% else %}
             <article>
               {% if form.instance.image %}
@@ -33,11 +34,11 @@
                   <img class="border-3 rounded img-fluid img-thumbnail mb-2" src="{{ form.instance.image.url }}">
                 </a>
               {% endif %}
-              <h3>{{ form.instance.title }}</h3>
+              <h3>{{ form.instance.name }}</h3>
               <p>{{ form.instance.description|linebreaksbr }}</p>
+              {% bootstrap_button button_type="submit" content="Удалить препарат" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 6px 25px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;" %}
             </article>
           {% endif %}
-          {% bootstrap_button button_type="submit" content="Отправить" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 6px 25px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;" %}
         </form>
       </div>
     </div>

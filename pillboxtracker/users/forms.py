@@ -20,4 +20,7 @@ class CustomUserCreateForm(UserCreationForm):
 
 class CustomUserUpdateForm(CustomUserCreateForm):
     class Meta(CustomUserCreateForm.Meta):
-        fields = ('first_name', 'last_name', 'username', 'bio',)
+        fields = (
+            'avatar', 'first_name', 'last_name', 'username', 'gender', 'bio', 
+            'birthday', 
+        )

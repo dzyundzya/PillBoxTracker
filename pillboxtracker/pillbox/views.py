@@ -5,10 +5,15 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.urls import reverse
 
+from .constants import PillboxConstants as const
 from .forms import CommentForm, PillForm
-from .mixins import CommentMixin, OnlyAdminMixin
-from .models import Comment, Pill
+from .mixins import CommentMixin, OnlyAdminMixin, PillSuccessUrlMixin, UserSuccessUrlMixin
+from .models import Category, Comment, Pill
 from .utils import comment_count, pill_filter
+from users.forms import CustomUserUpdateForm
+
+
+User = get_user_model()
 
 
 class PillDetailView(DetailView):
@@ -31,13 +36,13 @@ class PillDetailView(DetailView):
         return context
 
 
-class PillCreateView(LoginRequiredMixin, CreateView):
+class PillCreateView(PillSuccessUrlMixin, LoginRequiredMixin, CreateView):
     model = Pill
     form_class = PillForm
     template_name = 'pillbox/pill_create.html'
 
     def form_valid(self, form):
-        form.instance.author = self.request.user.is_staff
+        form.instance.author = self.request.user
         return super().form_valid(form)
 
 
@@ -87,3 +92,62 @@ class CommentUpdateView(CommentMixin, UpdateView):
 
 class CommentDeleteView(CommentMixin, DeleteView):
     pass
+
+
+class CategoryListView(ListView):
+    model = Pill
+    template_name = 'pillbox/category.html'
+    paginate_by = const.PAGINATION
+
+    def get_queryset(self):
+        self.pill_category = get_object_or_404(
+            Category, slug=self.kwargs.get('category_slug'), is_published=True,
+        )
+        posts = comment_count(
+            pill_filter(self.pill_category.posts)).order_by('-pub_date')
+        return posts
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['category'] = self.pill_category
+        return context
+
+
+class AdminProfileView(ListView):
+    model = User
+    template_name = 'pillbox/admin_profile.html'
+    context_object_name = 'profile'
+    paginate_by = const.PAGINATION
+
+    def get_queryset(self):
+        return comment_count(Pill.objects.all())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = get_object_or_404(
+            User, username=self.kwargs['username']
+        )
+        return context
+    
+
+class ProfileView(ListView):
+    model = User
+    template_name = 'pillbox/profile.html'
+    context_object_name = 'profile'
+    paginate_by = const.PAGINATION
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = get_object_or_404(
+            User, username=self.kwargs['username']
+        )
+        return context
+
+
+class ProfileUpdateView(UserSuccessUrlMixin, LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = CustomUserUpdateForm
+    template_name = 'pillbox/user.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user

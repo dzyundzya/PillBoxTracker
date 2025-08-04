@@ -1,4 +1,6 @@
 class PillboxConstants:
+    PAGINATION = 10
+
     class MAX_LENGTH:
         NAME = 256
         COUNTRY = 100

@@ -8,10 +8,10 @@ from .models import Comment
 
 class OnlyAdminMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_staff:
+        if not self.request.user.is_staff:
             return redirect(
                 'pillbox:pill_detail',
-                post_id=self.kwargs.get('pill_id')
+                pill_id=self.kwargs.get('pill_id')
             )
         return super().dispatch(request, *args, **kwargs)
 
@@ -34,6 +34,13 @@ class CommentMixin(PillSuccessUrlMixin, LoginRequiredMixin, View):
         if self.get_object().author != self.request.user:
             return redirect(
                 'pillbox:pill_detail',
-                post_id=self.kwargs['pill_id']
+                pill_id=self.kwargs['pill_id']
             )
         return super().dispatch(request, *args, **kwargs)
+
+
+class UserSuccessUrlMixin:
+    def get_success_url(self):
+        return reverse(
+            'pillbox:profile', kwargs={'username': self.request.user.username}
+        )

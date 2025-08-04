@@ -3,13 +3,24 @@
   <nav class="navbar navbar-light" style="background-color: rgba(25, 135, 84, 0.25);">
     <div class="container">
       <a class="navbar-brand" href="{% url 'pages:homepage' %}">
-        <img src="{% static 'img/logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+        <img src="{% static 'img/pillbox.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
         Таблетница
       </a>
           {% if user.is_authenticated %}
+            
             <div class="btn-group" role="group" aria-label="Basic outlined example">
-              <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
-                  href="{% url 'pillbox:create_pill' %}">Добавить препарат</a></button>
+              {% if request.user.is_staff %}
+                <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
+                    href="{% url 'pillbox:create_pill' %}">Добавить препарат</a></button>
+                <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
+                  href="{% url 'pillbox:admin_profile' user.username %}">Профиль администратора</a></button>
+              {% endif %}
+              {% if not request.user.is_staff %}
+                <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
+                  href="{% url 'pillbox:profile' user.username %}">Таблетница</a></button>
+                <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
+                  href="{% url 'pillbox:profile' user.username %}">Профиль пользователя</a></button>
+              {% endif %}
               <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
                   href="{% url 'logout' %}">Выйти</a></button>
             </div>

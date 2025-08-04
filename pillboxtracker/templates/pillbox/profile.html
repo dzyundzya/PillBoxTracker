@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+  Страница пользователя {{ profile.username }}
+{% endblock %}
+{% block content %}
+  <h1 class="mb-5 text-center ">Страница пользователя {{ profile.username }}</h1>
+  {% if profile.image %}
+    <a href="{{ profile.image.url }}">
+      <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ profile.image.url }}" style="width: 180px; height: 180px;">
+    </a>
+  {% else %}
+   <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{% static 'img/avatar.jpg' %}" style="width: 180px; height: 180px;">
+  {% endif %}
+  <small>
+    <ul class="list-group list-group-horizontal justify-content-center mb-3">
+      <li class="list-group-item text-muted">Имя пользователя: {% if profile.get_full_name %}{{ profile.get_full_name }}{% else %}не указано{% endif %}</li>
+      <li class="list-group-item text-muted">Регистрация: {{ profile.date_joined }}</li>
+      <li class="list-group-item text-muted">Роль: {% if profile.is_staff %}Админ{% else %}Пользователь{% endif %}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal justify-content-center">
+      {% if user.is_authenticated and request.user == profile %}
+      <a class="btn btn-sm text-muted" href="{% url 'pillbox:edit_profile' %}">Редактировать профиль</a>
+      <a class="btn btn-sm text-muted" href="{% url 'password_change' %}">Изменить пароль</a>
+      {% endif %}
+    </ul>
+  </small>
+  <br>
+  <h3 class="mb-5 text-center">Препараты выбранные пользователем</h3>
+  {% comment %} {% for pill in page_obj %}
+    <article class="mb-5">
+      {% include "includes/pill_card.html" %}
+    </article>
+  {% endfor %} {% endcomment %}
+  {% include "includes/paginator.html" %}
+{% endblock %}

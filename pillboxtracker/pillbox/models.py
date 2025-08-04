@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 
 from .constants import PillboxConstants as const
 
@@ -51,8 +52,20 @@ class Pill(GeneralModel):
         help_text=const.HELP_TEXT.IS_PUBLISHED
     )
 
+    class Meta:
+        verbose_name = 'препарат'
+        verbose_name_plural = 'Препараты'
+
     def __str__(self):
         return self.name
+
+    def display_active_substance(self):
+        return ', '.join(sorted([
+            as_.name for as_ in self.active_substance.all()
+        ]))
+
+    def get_absolute_url(self):
+        return reverse('pillbox:pill_detail', kwargs={'pill_id': self.pk})
 
 
 class ActiveSubstance(GeneralModel):
@@ -98,8 +111,8 @@ class MedicineForm(GeneralModel):
     )
 
     class Meta:
-        verbose_name = 'категория'
-        verbose_name_plural = 'Категории'
+        verbose_name = 'форма выпуска'
+        verbose_name_plural = 'Формы выпуска'
         ordering = ('name',)
         constraints = [
             models.UniqueConstraint(
