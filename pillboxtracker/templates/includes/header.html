@@ -17,7 +17,7 @@
               {% endif %}
               {% if not request.user.is_staff %}
                 <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
-                  href="{% url 'pillbox:profile' user.username %}">Таблетница</a></button>
+                  href="{% url 'pillbox:create_pillbox' %}">Добавить таблетницу</a></button>
                 <button type="button" class="btn btn-outline-dark"><a class="text-decoration-none text-reset"
                   href="{% url 'pillbox:profile' user.username %}">Профиль пользователя</a></button>
               {% endif %}

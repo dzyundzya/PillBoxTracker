@@ -24,6 +24,14 @@ class PillSuccessUrlMixin:
         )
 
 
+class PillBoxSuccessUrlMixin:
+    def get_success_url(self):
+        return reverse(
+            'pillbox:pillbox_detail',
+            kwargs={'pillbox_id': self.kwargs.get('pillbox_id')}
+        )
+
+
 class CommentMixin(PillSuccessUrlMixin, LoginRequiredMixin, View):
     model = Comment
     template_name = 'pillbox/comment.html'

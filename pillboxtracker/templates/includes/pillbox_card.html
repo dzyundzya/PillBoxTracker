@@ -1,0 +1,64 @@
+<div class="col d-flex justify-content-center">
+  <div class="card aspect-ratio" style="width: 70rem;">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4">
+          {% if pillbox.pill.image %}
+            <a href="{{ pillbox.pill.image.url }}">
+              <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ pillbox.pill.image.url }}" style="width: 300px; height: 300px;">
+            </a>
+          {% endif %}
+        </div>
+        <div class="col-8">
+          <h3 class="card-title">{{ pillbox.pill.name }}</h3>
+          <h6 class="card-subtitle mb-2 text-muted">
+            <small>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Активное вещество</th>
+                    <th>Форма выпуска</th>
+                    <th>Производитель</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ pillbox.pill.display_active_substance }}</td>
+                    <td>{{ pillbox.pill.medicine_form}}</td>
+                    <td>{{ pillbox.pill.manufacturer }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Оставшееся количество</th>
+                    <th>Количество в день</th>
+                    <th>Время приема</th>
+                    <th>Количесвто дней приема</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ pillbox.amount }}</td>
+                    <td>{{ pillbox.daily_count}}</td>
+                    <td>{{ pillbox.display_reminder_time }}</td>
+                    <td>{{ pillbox.remaining_days }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="text-end">
+                <a href="{% url 'pillbox:pill_detail' pillbox.pill.id %}" class="btn" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 4px 8px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+                  Перейти к препарату  
+                </a>
+              </div>
+            </small>
+          </h6>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ЛАЙКИ ЦВЕТ 237 145 33-->

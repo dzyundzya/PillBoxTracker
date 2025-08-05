@@ -27,10 +27,10 @@
   </small>
   <br>
   <h3 class="mb-5 text-center">Препараты выбранные пользователем</h3>
-  {% comment %} {% for pill in page_obj %}
+  {% for pillbox in page_obj %}
     <article class="mb-5">
-      {% include "includes/pill_card.html" %}
+      {% include "includes/pillbox_card.html" %}
     </article>
-  {% endfor %} {% endcomment %}
+  {% endfor %}
   {% include "includes/paginator.html" %}
 {% endblock %}

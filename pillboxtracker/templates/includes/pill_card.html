@@ -3,7 +3,7 @@
     <div class="card-body">
       {% if pill.image %}
         <a href="{{ pill.image.url }}" target="_blank">
-          <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ pill.image.url }}">
+          <img class="border-3 rounded img-fluid img-thumbnail mb-2 mx-auto d-block" src="{{ pill.image.url }}" style="width: 600px; height: 400px;">
         </a>
       {% endif %}
       <h3 class="card-title">{{ pill.name }}</h3>

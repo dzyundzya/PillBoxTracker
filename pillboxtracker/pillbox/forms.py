@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Comment, Pill
+from .models import Comment, Pill, Pillbox
 
 
 class PillForm(forms.ModelForm):
@@ -34,3 +34,9 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('text',)
+
+
+class PillBoxForm(forms.ModelForm):
+    class Meta:
+        model = Pillbox
+        fields = ('pill', 'amount', 'daily_count', 'reminder_time')

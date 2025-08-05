@@ -6,9 +6,9 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from django.urls import reverse
 
 from .constants import PillboxConstants as const
-from .forms import CommentForm, PillForm
+from .forms import CommentForm, PillForm, PillBoxForm
 from .mixins import CommentMixin, OnlyAdminMixin, PillSuccessUrlMixin, UserSuccessUrlMixin
-from .models import Category, Comment, Pill
+from .models import Category, Comment, Pill, Pillbox
 from .utils import comment_count, pill_filter
 from users.forms import CustomUserUpdateForm
 
@@ -134,7 +134,13 @@ class ProfileView(ListView):
     model = User
     template_name = 'pillbox/profile.html'
     context_object_name = 'profile'
-    paginate_by = const.PAGINATION
+    paginate_by = 3
+
+    def get_queryset(self):
+        pillbox_user = get_object_or_404(
+            User, username=self.kwargs['username']
+        )
+        return Pillbox.objects.filter(user=pillbox_user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -151,3 +157,33 @@ class ProfileUpdateView(UserSuccessUrlMixin, LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+
+class PillBoxCreateView(LoginRequiredMixin, CreateView):
+    model = Pillbox
+    form_class = PillBoxForm
+    template_name = 'pillbox/pillbox_create.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+# class PillUpdateView(OnlyAdminMixin, UpdateView):
+#     model = Pill
+#     form_class = PillForm
+#     template_name = 'pillbox/pill_create.html'
+#     pk_url_kwarg = 'pill_id'
+
+
+# class PillDeleteView(OnlyAdminMixin, DeleteView):
+#     model = Pill
+#     pk_url_kwarg = 'pill_id'
+#     template_name = 'pillbox/pill_create.html'
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['form'] = PillForm(
+#             instance=self.object
+#         )
+#         return context

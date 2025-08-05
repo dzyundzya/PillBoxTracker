@@ -18,9 +18,16 @@ class CustomUserCreateForm(UserCreationForm):
         }
 
 
-class CustomUserUpdateForm(CustomUserCreateForm):
-    class Meta(CustomUserCreateForm.Meta):
+class CustomUserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
         fields = (
             'avatar', 'first_name', 'last_name', 'username', 'gender', 'bio', 
             'birthday', 
         )
+        widgets = {
+            'birthday': forms.DateInput(attrs={
+                'type': 'date',
+                'placeholder': 'Выберите дату рождения'
+            })
+        }

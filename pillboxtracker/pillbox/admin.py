@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import ActiveSubstance, Category, Pill, Manufacturer, MedicineForm
+from .models import ActiveSubstance, Category, Pill, Manufacturer, MedicineForm, Pillbox, ReminderTime
 
 
 @admin.register(ActiveSubstance)
@@ -25,4 +25,14 @@ class ManufacturerAdmin(admin.ModelAdmin):
 
 @admin.register(MedicineForm)
 class MedicineFormAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Pillbox)
+class PillboxAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ReminderTime)
+class ReminderTimeAdmin(admin.ModelAdmin):
     pass
