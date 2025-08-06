@@ -7,8 +7,8 @@ from django.urls import reverse
 
 from .constants import PillboxConstants as const
 from .forms import CommentForm, PillForm, PillBoxForm
-from .mixins import CommentMixin, OnlyAdminMixin, PillSuccessUrlMixin, UserSuccessUrlMixin
-from .models import Category, Comment, Pill, Pillbox
+from .mixins import CommentMixin, OnlyAdminMixin, OnlyUserMixin, PillSuccessUrlMixin, UserSuccessUrlMixin
+from .models import Category, Comment, Pill, Pillbox, Like
 from .utils import comment_count, pill_filter
 from users.forms import CustomUserUpdateForm
 
@@ -169,21 +169,26 @@ class PillBoxCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-# class PillUpdateView(OnlyAdminMixin, UpdateView):
-#     model = Pill
-#     form_class = PillForm
-#     template_name = 'pillbox/pill_create.html'
-#     pk_url_kwarg = 'pill_id'
+class PillBoxUpdateView(OnlyUserMixin, UpdateView):
+    model = Pillbox
+    form_class = PillBoxForm
+    template_name = 'pillbox/pillbox_create.html'
+    pk_url_kwarg = 'pillbox_id'
 
 
-# class PillDeleteView(OnlyAdminMixin, DeleteView):
-#     model = Pill
-#     pk_url_kwarg = 'pill_id'
-#     template_name = 'pillbox/pill_create.html'
+class PillBoxDeleteView(OnlyUserMixin, DeleteView):
+    model = Pillbox
+    pk_url_kwarg = 'pillbox_id'
+    template_name = 'pillbox/pillbox_create.html'
 
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['form'] = PillForm(
-#             instance=self.object
-#         )
-#         return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = PillBoxForm(
+            instance=self.object
+        )
+        return context
+
+    def get_success_url(self):
+        return reverse(
+            'pillbox:profile', kwargs={'username': self.request.user.username}
+        )

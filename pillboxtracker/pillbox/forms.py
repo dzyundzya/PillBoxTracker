@@ -37,6 +37,7 @@ class CommentForm(forms.ModelForm):
 
 
 class PillBoxForm(forms.ModelForm):
+
     class Meta:
         model = Pillbox
         fields = ('pill', 'amount', 'daily_count', 'reminder_time')

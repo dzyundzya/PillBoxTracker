@@ -16,6 +16,15 @@ class OnlyAdminMixin(LoginRequiredMixin):
         return super().dispatch(request, *args, **kwargs)
 
 
+class OnlyUserMixin(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().user != self.request.user:
+            return redirect(
+                'pages:homepage',
+            )
+        return super().dispatch(request, *args, **kwargs)
+
+
 class PillSuccessUrlMixin:
     def get_success_url(self):
         return reverse(

@@ -21,4 +21,6 @@ urlpatterns = [
     path('admin-profile/<str:username>/', views.AdminProfileView.as_view(), name='admin_profile'),
     path('profile/<str:username>/', views.ProfileView.as_view(), name='profile'),
     path('pillbox/create/', views.PillBoxCreateView.as_view(), name='create_pillbox'),
+    path('pillbox/<int:pillbox_id>/edit/', views.PillBoxUpdateView.as_view(), name='edit_pillbox'),
+    path('pillbox/<int:pillbox_id>/delete/', views.PillBoxDeleteView.as_view(), name='delete_pillbox'),
 ]

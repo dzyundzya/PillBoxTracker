@@ -39,13 +39,15 @@
         </h6>
         <p class="card-text">{{ pill.description|linebreaksbr }}</p>
         {% if request.user.is_staff %}
-          <div class="mb-2">
-            <a class="btn btn-sm text-muted" href="{% url 'pillbox:edit_pill' pill.id %}" role="button">
-              Отредактировать публикацию
-            </a>
-            <a class="btn btn-sm text-muted" href="{% url 'pillbox:delete_pill' pill.id %}" role="button">
-              Удалить публикацию
-            </a>
+          <div class="row">
+            <div class="col-8 mb-2">
+              <a class="btn btn-sm" href="{% url 'pillbox:edit_pill' pill.id %}" role="button" style="background-color: rgba(25, 135, 84, 0.50); color: white; padding: 4px 8px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+                Отредактировать публикацию
+              </a>
+              <a class="btn btn-sm" href="{% url 'pillbox:delete_pill' pill.id %}" role="button" style="background-color: rgba(139, 0, 0, 0.50); color: white; padding: 4px 8px; border-radius: 8px; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); transition: all 0.3s ease;">
+                Удалить публикацию
+              </a>
+            </div>
           </div>
         {% endif %}
         {% include "includes/comments.html" %}

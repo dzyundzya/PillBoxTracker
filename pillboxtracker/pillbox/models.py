@@ -173,6 +173,26 @@ class Comment(models.Model):
         ordering = ('created_at',)
 
 
+class Like(GeneralModel):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='likes',
+        verbose_name='Пользователь'
+    )
+    pill = models.ForeignKey(
+        Pill,
+        on_delete=models.CASCADE,
+        related_name='likes',
+        verbose_name='Препарат'
+    )
+
+    class Meta:
+        unique_together = ('user', 'pill')
+        verbose_name = 'лайк'
+        verbose_name_plural = 'Лайки'
+
+
 class Pillbox(models.Model):
     pill = models.ForeignKey(
         Pill, on_delete=models.SET_NULL, null=True,
@@ -229,7 +249,10 @@ class Pillbox(models.Model):
     def remaining_days(self):
         """Расчет оставшихся дней приема."""
         if self.amount and self.daily_count:
-            return self.amount // self.daily_count
+            days = self.amount // self.daily_count
+            if self.amount % self.daily_count != 0:
+                return days + 1
+            return days
         return 0
 
     def display_reminder_time(self):
