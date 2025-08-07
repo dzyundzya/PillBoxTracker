@@ -7,8 +7,8 @@ from django.urls import reverse
 
 from .constants import PillboxConstants as const
 from .forms import CommentForm, PillForm, PillBoxForm
-from .mixins import CommentMixin, OnlyAdminMixin, OnlyUserMixin, PillSuccessUrlMixin, UserSuccessUrlMixin
-from .models import Category, Comment, Pill, Pillbox, Like
+from .mixins import CommentMixin, OnlyAdminMixin, PillSuccessUrlMixin, UserSuccessUrlMixin, PillBoxMixin
+from .models import Category, Comment, Pill, Pillbox
 from .utils import comment_count, pill_filter
 from users.forms import CustomUserUpdateForm
 
@@ -17,6 +17,7 @@ User = get_user_model()
 
 
 class PillDetailView(DetailView):
+    """Представление для отображения детальной информации о препарате."""
     model = Pill
     template_name = 'pillbox/pill_detail.html'
     pk_url_kwarg = 'pill_id'
@@ -36,7 +37,13 @@ class PillDetailView(DetailView):
         return context
 
 
-class PillCreateView(PillSuccessUrlMixin, LoginRequiredMixin, CreateView):
+class PillCreateView(PillSuccessUrlMixin, OnlyAdminMixin, CreateView):
+    """
+    Представление для создание нового препарата.
+
+    Класс предоставляет интерфейс для создания новых записей о препаратах.
+    Доступ к созданию имеют только пользователи с правами администратора.
+    """
     model = Pill
     form_class = PillForm
     template_name = 'pillbox/pill_create.html'
@@ -47,6 +54,12 @@ class PillCreateView(PillSuccessUrlMixin, LoginRequiredMixin, CreateView):
 
 
 class PillUpdateView(OnlyAdminMixin, UpdateView):
+    """
+    Представление для обновления существующего препарата.
+
+    Класс предоставляет интерфейс для редактирования записей о препаратах.
+    Доступ к редактированию имеют только пользователи с правами администратора.
+    """
     model = Pill
     form_class = PillForm
     template_name = 'pillbox/pill_create.html'
@@ -54,6 +67,13 @@ class PillUpdateView(OnlyAdminMixin, UpdateView):
 
 
 class PillDeleteView(OnlyAdminMixin, DeleteView):
+    """
+    Представление для удаления препарата.
+
+    Класс предоставляет интерфейс для удаления записей о препаратах.
+    Доступ к удалению имеют только пользователи с правами администратора.
+    Перед удалением отображается форма подтверждения.
+    """
     model = Pill
     pk_url_kwarg = 'pill_id'
     template_name = 'pillbox/pill_create.html'
@@ -67,6 +87,13 @@ class PillDeleteView(OnlyAdminMixin, DeleteView):
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
+    """
+    Представления для создания нового комментария к препарату.
+
+    Класс представляет интерфейс для создания комментариев.
+    Доступ к комментированию имеют только авторизованные пользователи.
+    Автоматический устанавливает автора комментария, связывает с препаратом.
+    """
     pill_object = None
     model = Comment
     form_class = CommentForm
@@ -87,14 +114,33 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 
 class CommentUpdateView(CommentMixin, UpdateView):
+    """
+    Представления для обновления комментария.
+
+    Класс представляет интерфейс для редактирования комментариев.
+    Доступ к редактированию комментариев имеет только автор комментария.
+    """
     form_class = CommentForm
 
 
 class CommentDeleteView(CommentMixin, DeleteView):
+    """
+    Представления для удаления комментария.
+
+    Класс представляет интерфейс для удаления комментариев.
+    Доступ к удалению комментариев имеет только автор комментария.
+    Перед удалением отображается форма подтверждения.
+    """
     pass
 
 
 class CategoryListView(ListView):
+    """
+    Представление для отображения списка препаратов по категории.
+
+    Класс предоставляет интерфейс для просмотра препаратов,
+    отфильтрованных по выбранной категории.
+    """
     model = Pill
     template_name = 'pillbox/category.html'
     paginate_by = const.PAGINATION
@@ -114,6 +160,13 @@ class CategoryListView(ListView):
 
 
 class AdminProfileView(ListView):
+    """
+    Представление для административного профиля пользователя.
+
+    Класс предоставляет интерфейс для просмотра профилей пользователей
+    с административными правами. Отображает список всех препаратов
+    с подсчетом комментариев и пагинацией.
+    """
     model = User
     template_name = 'pillbox/admin_profile.html'
     context_object_name = 'profile'
@@ -128,19 +181,27 @@ class AdminProfileView(ListView):
             User, username=self.kwargs['username']
         )
         return context
-    
+
 
 class ProfileView(ListView):
+    """
+    Представление для пользовательского профиля.
+
+    Класс представляет интерфейс для просмотра профиля пользователя,
+    включая его таблеточницу.
+    """
     model = User
     template_name = 'pillbox/profile.html'
     context_object_name = 'profile'
     paginate_by = 3
 
     def get_queryset(self):
-        pillbox_user = get_object_or_404(
-            User, username=self.kwargs['username']
+        username = self.kwargs.get('username')
+        return Pillbox.objects.filter(user__username=username).select_related(
+            'pill__manufacturer', 'pill__medicine_form',
+        ).prefetch_related(
+            'pill__active_substance', 'reminder_time'
         )
-        return Pillbox.objects.filter(user=pillbox_user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -151,6 +212,12 @@ class ProfileView(ListView):
 
 
 class ProfileUpdateView(UserSuccessUrlMixin, LoginRequiredMixin, UpdateView):
+    """
+    Предстваление для обновления профиля пользователя.
+
+    Класс представляет интерфейс для редактирования профиля.
+    Пользовтель может редактировать только свой профиль.
+    """
     model = User
     form_class = CustomUserUpdateForm
     template_name = 'pillbox/user.html'
@@ -160,6 +227,12 @@ class ProfileUpdateView(UserSuccessUrlMixin, LoginRequiredMixin, UpdateView):
 
 
 class PillBoxCreateView(LoginRequiredMixin, CreateView):
+    """
+    Представление для создания новой таблеточницы.
+
+    Класс предоставляет интерфейс для создания таблеточницы.
+    Автомотический связывает таблеточницу с текущим пользователем.    
+    """
     model = Pillbox
     form_class = PillBoxForm
     template_name = 'pillbox/pillbox_create.html'
@@ -169,18 +242,24 @@ class PillBoxCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PillBoxUpdateView(OnlyUserMixin, UpdateView):
-    model = Pillbox
+class PillBoxUpdateView(PillBoxMixin, UpdateView):
+    """
+    Представление для обновления таблеточницы.
+
+    Класс предоставляет интерфейс для реадактирования таблеточницы.
+    Доступ к редактированию таблеточницы имеет только автор таблеточницы.
+    """
     form_class = PillBoxForm
-    template_name = 'pillbox/pillbox_create.html'
-    pk_url_kwarg = 'pillbox_id'
 
 
-class PillBoxDeleteView(OnlyUserMixin, DeleteView):
-    model = Pillbox
-    pk_url_kwarg = 'pillbox_id'
-    template_name = 'pillbox/pillbox_create.html'
+class PillBoxDeleteView(PillBoxMixin, DeleteView):
+    """
+    Представление для удаления таблеточницы.
 
+    Класс предоставляет интерфейс для удаления таблеточницы.
+    Доступ к удалению таблеточницы имеет только автор таблеточницы.
+    Перед удалением отображается форма подтверждения.
+    """
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = PillBoxForm(

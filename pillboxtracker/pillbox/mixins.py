@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.views import View
 from django.urls import reverse
 
-from .models import Comment
+from .models import Comment, Pillbox
 
 
 class OnlyAdminMixin(LoginRequiredMixin):
@@ -12,15 +12,6 @@ class OnlyAdminMixin(LoginRequiredMixin):
             return redirect(
                 'pillbox:pill_detail',
                 pill_id=self.kwargs.get('pill_id')
-            )
-        return super().dispatch(request, *args, **kwargs)
-
-
-class OnlyUserMixin(LoginRequiredMixin):
-    def dispatch(self, request, *args, **kwargs):
-        if self.get_object().user != self.request.user:
-            return redirect(
-                'pages:homepage',
             )
         return super().dispatch(request, *args, **kwargs)
 
@@ -61,3 +52,16 @@ class UserSuccessUrlMixin:
         return reverse(
             'pillbox:profile', kwargs={'username': self.request.user.username}
         )
+
+
+class PillBoxMixin(LoginRequiredMixin, View):
+    model = Pillbox
+    template_name = 'pillbox/pillbox_create.html'
+    pk_url_kwarg = 'pillbox_id'
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().user != self.request.user:
+            return redirect(
+                'pages:homepage',
+            )
+        return super().dispatch(request, *args, **kwargs)

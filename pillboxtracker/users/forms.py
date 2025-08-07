@@ -23,11 +23,14 @@ class CustomUserUpdateForm(forms.ModelForm):
         model = User
         fields = (
             'avatar', 'first_name', 'last_name', 'username', 'gender', 'bio', 
-            'birthday', 
+            'birthday', 'telegram_chat_id'
         )
         widgets = {
             'birthday': forms.DateInput(attrs={
                 'type': 'date',
                 'placeholder': 'Выберите дату рождения'
-            })
+            }),
+            'telegram_chat_id': forms.NumberInput(attrs={
+                'placeholder': 'Введите telegram - chat_id'
+            }),
         }

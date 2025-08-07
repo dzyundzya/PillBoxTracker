@@ -13,7 +13,10 @@ class HomePage(ListView):
     paginate_by = const.PAGINATION
 
     def get_queryset(self):
-        return comment_count(pill_filter(Pill.objects)).order_by('-pub_date')
+        return comment_count(
+            pill_filter(Pill.objects)).select_related(
+                'medicine_form', 'manufacturer', 'category'
+        ).prefetch_related('active_substance')
 
 
 class Rules(TemplateView):

@@ -41,6 +41,9 @@ class CustomUser(AbstractUser):
         blank=True,
         null=True,
     )
+    telegram_chat_id = models.BigIntegerField(
+        'ID чата Telegram', blank=True, null=True
+    )
     gender = models.CharField(
         'Пол', max_length=uc.MAX_LENGTH.GENDER, blank=True
     )
