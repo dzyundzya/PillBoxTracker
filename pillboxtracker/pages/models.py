@@ -8,8 +8,11 @@ class Accordion(models.Model):
     strong_text = models.CharField(
         'Заголовок вкладки', blank=True, null=True, max_length=100,
     )
-    text = models.CharField(
-        'Содержание вкладки', blank=True, null=True, max_length=1000,
+    text = models.TextField(
+        'Содержание вкладки', blank=True, null=True,
+    )
+    group = models.CharField(
+        'Группа аккардеона', blank=True, null=True, max_length=30,
     )
 
     def __str__(self):

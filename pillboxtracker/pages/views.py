@@ -24,12 +24,17 @@ class Rules(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["tabs"] = Accordion.objects.all()
+        context["tabs"] = Accordion.objects.filter(group='rules')
         return context
 
 
 class About(TemplateView):
     template_name = 'pages/about.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tabs"] = Accordion.objects.filter(group='about')
+        return context
 
 
 def page_not_found(request, exception):

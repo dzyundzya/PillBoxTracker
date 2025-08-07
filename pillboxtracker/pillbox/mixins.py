@@ -1,9 +1,9 @@
-from django.contrib.auth.mixins import LoginRequiredMixin 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.views import View
 from django.urls import reverse
 
-from .models import Comment, Pillbox
+from .models import Comment, Pill, Pillbox
 
 
 class OnlyAdminMixin(LoginRequiredMixin):
@@ -20,7 +20,7 @@ class PillSuccessUrlMixin:
     def get_success_url(self):
         return reverse(
             'pillbox:pill_detail',
-            kwargs={'pill_id': self.kwargs.get('pill_id')}
+            kwargs={'pill_id': self.object.id}
         )
 
 
@@ -65,3 +65,9 @@ class PillBoxMixin(LoginRequiredMixin, View):
                 'pages:homepage',
             )
         return super().dispatch(request, *args, **kwargs)
+
+
+class PillMixin(OnlyAdminMixin, View):
+    model = Pill
+    pk_url_kwarg = 'pill_id'
+    template_name = 'pillbox/pill_create.html'

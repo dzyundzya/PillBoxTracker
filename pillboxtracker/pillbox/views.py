@@ -1,13 +1,18 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.base import Model as Model
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.shortcuts import get_object_or_404
+from django.views.generic import (
+    CreateView, DeleteView, DetailView, ListView, UpdateView
+)
 from django.urls import reverse
 
 from .constants import PillboxConstants as const
 from .forms import CommentForm, PillForm, PillBoxForm
-from .mixins import CommentMixin, OnlyAdminMixin, PillSuccessUrlMixin, UserSuccessUrlMixin, PillBoxMixin
+from .mixins import (
+    CommentMixin, OnlyAdminMixin, PillMixin, PillBoxMixin,
+    PillSuccessUrlMixin, UserSuccessUrlMixin
+)
 from .models import Category, Comment, Pill, Pillbox
 from .utils import comment_count, pill_filter
 from users.forms import CustomUserUpdateForm
@@ -53,20 +58,17 @@ class PillCreateView(PillSuccessUrlMixin, OnlyAdminMixin, CreateView):
         return super().form_valid(form)
 
 
-class PillUpdateView(OnlyAdminMixin, UpdateView):
+class PillUpdateView(PillMixin, UpdateView):
     """
     Представление для обновления существующего препарата.
 
     Класс предоставляет интерфейс для редактирования записей о препаратах.
     Доступ к редактированию имеют только пользователи с правами администратора.
     """
-    model = Pill
     form_class = PillForm
-    template_name = 'pillbox/pill_create.html'
-    pk_url_kwarg = 'pill_id'
 
 
-class PillDeleteView(OnlyAdminMixin, DeleteView):
+class PillDeleteView(PillMixin, DeleteView):
     """
     Представление для удаления препарата.
 
@@ -74,9 +76,6 @@ class PillDeleteView(OnlyAdminMixin, DeleteView):
     Доступ к удалению имеют только пользователи с правами администратора.
     Перед удалением отображается форма подтверждения.
     """
-    model = Pill
-    pk_url_kwarg = 'pill_id'
-    template_name = 'pillbox/pill_create.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -84,6 +83,12 @@ class PillDeleteView(OnlyAdminMixin, DeleteView):
             instance=self.object
         )
         return context
+
+    def get_success_url(self):
+        return reverse(
+            'pillbox:admin_profile',
+            kwargs={'username': self.request.user.username}
+        )
 
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
@@ -173,7 +178,11 @@ class AdminProfileView(ListView):
     paginate_by = const.PAGINATION
 
     def get_queryset(self):
-        return comment_count(Pill.objects.all())
+        return comment_count(Pill.objects.all().select_related(
+            'author', 'category', 'medicine_form', 'manufacturer'
+        ).prefetch_related(
+            'active_substance'
+        ))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -109,3 +109,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 LOGIN_REDIRECT_URL = '/'
+
+CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'

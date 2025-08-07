@@ -25,8 +25,10 @@
             <!-- Тело (содержимое) -->
             <div id="collapseOne{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ forloop.counter }}" data-bs-parent="#accordionExample">
               <div class="accordion-body">
-                <strong>{{ tab.strong_text }}.</strong>
-                {{ tab.text }}
+                {% if tab.strong_text %}
+                  <strong>{{ tab.strong_text }}.</strong>
+                {% endif %}
+                {{ tab.text|safe }}
               </div>
             </div>
           {% endfor %}

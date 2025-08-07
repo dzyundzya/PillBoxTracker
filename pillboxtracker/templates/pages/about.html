@@ -10,19 +10,36 @@
       </div>
       <div class="card-body">
         <p>
-          Блогикум — это дом для творческих людей. Это — сообщество людей, для которых
-          нет грани между ведением блога и дружбой в социальных сетях.
+          Таблетница — это веб-приложение для эффективного управления
+          лекарственными препаратами и их систематизации. Проект создан для 
+          помощи пользователям в организации и контроле приема медикаментов.
         </p>
         <p>
-          Дружба и рассказы о новых, неизведанных впечатлениях — вот
-          что вы найдете на нашем ресурсе. Миллионы блогов по различным темам.
-          Путешествия, политика, развлечения, мода, литература, дизайн и все
-          другие сферы человеческой деятельности.
+          Проект «Таблетница» призван сделать процесс управления лекарствами 
+          более организованным и эффективным, помогая пользователям следить 
+          за своим здоровьем и своевременно принимать необходимые препараты.
         </p>
-        <p>
-          Творчество, разнообразие и свобода взглядов и самовыражения —
-          основные черты наших пользователей.
-        </p>
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            {% for tab in tabs %}
+              <!-- Кнопка в заголовке -->
+              <h2 class="accordion-header" id="headingOne{{ forloop.counter }}">
+                <button class="accordion-button bg-success bg-opacity-10 text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne{{ forloop.counter }}" aria-expanded="true" aria-controls="collapseOne">
+                  {{ tab.title }}
+                </button>
+              </h2>
+              <!-- Тело (содержимое) -->
+              <div id="collapseOne{{ forloop.counter }}" class="accordion-collapse collapse" aria-labelledby="headingOne{{ forloop.counter }}" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                  {% if tab.strong_text %}
+                    <strong>{{ tab.strong_text }}.</strong>
+                  {% endif %}
+                  {{ tab.text|safe }}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
   </div>

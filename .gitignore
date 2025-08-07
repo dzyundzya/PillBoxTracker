@@ -150,3 +150,6 @@ media/
 
 sent_emails/
 
+celerybeat-schedule.bak
+celerybeat-schedule.date
+celerybeat-schedule.dir

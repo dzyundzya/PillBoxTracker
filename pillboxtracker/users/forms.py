@@ -22,7 +22,7 @@ class CustomUserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            'avatar', 'first_name', 'last_name', 'username', 'gender', 'bio', 
+            'avatar', 'first_name', 'last_name', 'username', 'gender', 'bio',
             'birthday', 'telegram_chat_id'
         )
         widgets = {
