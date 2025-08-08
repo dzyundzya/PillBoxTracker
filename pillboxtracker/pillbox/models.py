@@ -265,6 +265,8 @@ class Pillbox(models.Model):
             'pillbox:profile', kwargs={'username': self.user.username}
         )
 
+    display_reminder_time.short_description = 'Время напоминания'
+
 
 class ReminderTime(models.Model):
     time = models.TimeField(

@@ -12,8 +12,12 @@ class Accordion(models.Model):
         'Содержание вкладки', blank=True, null=True,
     )
     group = models.CharField(
-        'Группа аккардеона', blank=True, null=True, max_length=30,
+        'Группа аккордеона', blank=True, null=True, max_length=30,
     )
+
+    class Meta:
+        verbose_name = 'поле аккордеона'
+        verbose_name_plural = 'Аккордеон'
 
     def __str__(self):
         return self.title
