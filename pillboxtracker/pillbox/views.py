@@ -10,8 +10,8 @@ from django.urls import reverse
 from .constants import PillboxConstants as const
 from .forms import CommentForm, PillForm, PillBoxForm
 from .mixins import (
-    CommentMixin, OnlyAdminMixin, PillMixin, PillBoxMixin,
-    PillSuccessUrlMixin, UserSuccessUrlMixin
+    CommentMixin, OnlyAdminMixin, OnlyAuthorPillboxMixin, PillMixin,
+    PillBoxMixin, PillSuccessUrlMixin, UserSuccessUrlMixin
 )
 from .models import Category, Comment, Pill, Pillbox
 from .utils import comment_count, pill_filter
@@ -164,7 +164,7 @@ class CategoryListView(ListView):
         return context
 
 
-class AdminProfileView(ListView):
+class AdminProfileView(OnlyAdminMixin, ListView):
     """
     Представление для административного профиля пользователя.
 
@@ -182,7 +182,7 @@ class AdminProfileView(ListView):
             'author', 'category', 'medicine_form', 'manufacturer'
         ).prefetch_related(
             'active_substance'
-        ))
+        )).order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -192,7 +192,7 @@ class AdminProfileView(ListView):
         return context
 
 
-class ProfileView(ListView):
+class ProfileView(OnlyAuthorPillboxMixin, ListView):
     """
     Представление для пользовательского профиля.
 

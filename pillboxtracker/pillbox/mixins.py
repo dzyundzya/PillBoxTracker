@@ -9,9 +9,15 @@ from .models import Comment, Pill, Pillbox
 class OnlyAdminMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
         if not self.request.user.is_staff:
+            return redirect('pages:homepage')
+        return super().dispatch(request, *args, **kwargs)
+
+
+class OnlyAuthorPillboxMixin(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.username != self.kwargs.get('username'):
             return redirect(
-                'pillbox:pill_detail',
-                pill_id=self.kwargs.get('pill_id')
+                'pages:homepage',
             )
         return super().dispatch(request, *args, **kwargs)
 
@@ -20,7 +26,7 @@ class PillSuccessUrlMixin:
     def get_success_url(self):
         return reverse(
             'pillbox:pill_detail',
-            kwargs={'pill_id': self.object.id}
+            kwargs={'pill_id': self.kwargs.get('pill_id')}
         )
 
 

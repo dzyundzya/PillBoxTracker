@@ -16,7 +16,7 @@ class HomePage(ListView):
         return comment_count(
             pill_filter(Pill.objects)).select_related(
                 'medicine_form', 'manufacturer', 'category'
-        ).prefetch_related('active_substance')
+        ).prefetch_related('active_substance').order_by('-created_at')
 
 
 class Rules(TemplateView):

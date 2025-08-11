@@ -55,6 +55,7 @@ class Pill(GeneralModel):
     )
 
     class Meta:
+        ordering = ('-created_at',)
         verbose_name = 'препарат'
         verbose_name_plural = 'Препараты'
 
