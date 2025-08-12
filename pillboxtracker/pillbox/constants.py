@@ -1,5 +1,7 @@
 class PillboxConstants:
-    PAGINATION = 10
+    class PAGINATION:
+        PILL = 10
+        PILLBOX = 3
 
     class MAX_LENGTH:
         NAME = 256

@@ -1,7 +1,7 @@
 from http import HTTPStatus as http
 
 import pytest
-# from pytest_django.asserts import assertRedirects
+from pytest_django.asserts import assertRedirects
 from pytest_lazyfixture import lazy_fixture as lf
 
 
@@ -18,6 +18,7 @@ pytestmark = pytest.mark.django_db
         (lf('login_url'), lf('unlogged_client'), http.OK),
         (lf('logout_url'), lf('unlogged_client'), http.OK),
         (lf('registration_url'), lf('unlogged_client'), http.OK),
+        (lf('pill_detail_url'), lf('unlogged_client'), http.OK),
         # Создание, редактирование и удаление препарата
         (lf('create_pill_url'), lf('staff_user_client'), http.OK),
         (lf('create_pill_url'), lf('user_client'), http.FOUND),

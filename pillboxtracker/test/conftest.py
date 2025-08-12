@@ -1,8 +1,12 @@
+from datetime import timedelta
+
 import pytest
 from django.test.client import Client
 from django.urls import reverse
+from django.utils import timezone
 from mixer.backend.django import mixer as _mixer
 
+from pillbox.constants import PillboxConstants as const
 from pillbox.models import Comment, Pill, Pillbox
 
 
@@ -63,13 +67,42 @@ def pill(staff_user, mixer):
 
 
 @pytest.fixture
+def few_pills(staff_user, mixer):
+    pills = [
+        mixer.blend(
+            Pill, author=staff_user, is_published=True,
+            name=f'Название препарата {i}', description=f'Описание {i}'
+        ) for i in range(const.PAGINATION.PILL + 1)
+    ]
+    return pills
+
+
+@pytest.fixture
 def comment(user, pill, mixer):
     return mixer.blend(Comment, pill=pill, author=user)
 
 
 @pytest.fixture
+def few_comments(pill, user, mixer):
+    for i in range(const.PAGINATION.PILL):
+        comment = mixer.blend(Comment, pill=pill, author=user)
+        comment.created_at = timezone.now() + timedelta(hours=i)
+        comment.save()
+
+
+@pytest.fixture
 def pillbox(user, pill, mixer):
     return mixer.blend(Pillbox, pill=pill, user=user, is_active=True)
+
+
+@pytest.fixture
+def few_pillboxes(user, mixer, pill):
+    pillboxes = [
+        mixer.blend(
+            Pillbox, pill=pill, user=user, is_active=True,
+        ) for _ in range(const.PAGINATION.PILLBOX + 1)
+    ]
+    return pillboxes
 
 
 @pytest.fixture
@@ -135,6 +168,11 @@ def profile_url(user):
 @pytest.fixture
 def edit_profile_url():
     return reverse('pillbox:edit_profile')
+
+
+@pytest.fixture
+def add_comment_url(pill):
+    return reverse('pillbox:add_comment', kwargs={'pill_id': pill.id})
 
 
 @pytest.fixture

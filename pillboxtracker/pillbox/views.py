@@ -102,6 +102,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     pill_object = None
     model = Comment
     form_class = CommentForm
+    template_name = 'pillbox/comment.html'
 
     def dispatch(self, request, *args, **kwargs):
         self.pill_object = get_object_or_404(Pill, pk=kwargs.get('pill_id'))
@@ -175,7 +176,7 @@ class AdminProfileView(OnlyAdminMixin, ListView):
     model = User
     template_name = 'pillbox/admin_profile.html'
     context_object_name = 'profile'
-    paginate_by = const.PAGINATION
+    paginate_by = const.PAGINATION.PILL
 
     def get_queryset(self):
         return comment_count(Pill.objects.all().select_related(
@@ -202,7 +203,7 @@ class ProfileView(OnlyAuthorPillboxMixin, ListView):
     model = User
     template_name = 'pillbox/profile.html'
     context_object_name = 'profile'
-    paginate_by = 3
+    paginate_by = const.PAGINATION.PILLBOX
 
     def get_queryset(self):
         username = self.kwargs.get('username')

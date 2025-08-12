@@ -15,9 +15,13 @@ class OnlyAdminMixin(LoginRequiredMixin):
 
 class OnlyAuthorPillboxMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_staff or not self.request.user.is_authenticated:
+        if self.request.user.is_staff:
             return redirect(
                 'pages:homepage',
+            )
+        elif not self.request.user.is_authenticated:
+            return redirect(
+                'login',
             )
         return super().dispatch(request, *args, **kwargs)
 
