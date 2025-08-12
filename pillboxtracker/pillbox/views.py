@@ -235,7 +235,7 @@ class ProfileUpdateView(UserSuccessUrlMixin, LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class PillBoxCreateView(LoginRequiredMixin, CreateView):
+class PillBoxCreateView(OnlyAuthorPillboxMixin, CreateView):
     """
     Представление для создания новой таблеточницы.
 

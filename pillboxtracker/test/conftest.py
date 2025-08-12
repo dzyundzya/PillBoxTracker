@@ -18,7 +18,7 @@ def unlogged_client(client):
 
 @pytest.fixture
 def user(django_user_model, mixer):
-    return mixer.blend(django_user_model)
+    return mixer.blend(django_user_model, username='user', is_staff=False)
 
 
 @pytest.fixture
@@ -31,7 +31,9 @@ def user_client(user):
 
 @pytest.fixture
 def another_user(django_user_model, mixer):
-    return mixer.blend(django_user_model)
+    return mixer.blend(
+        django_user_model, username='another_user', is_staff=False
+    )
 
 
 @pytest.fixture
@@ -44,8 +46,7 @@ def another_user_client(another_user):
 @pytest.fixture
 def staff_user(django_user_model, mixer):
     return mixer.blend(
-        django_user_model,
-        is_staff=True
+        django_user_model, is_staff=True, username='staff_user'
     )
 
 
@@ -64,6 +65,11 @@ def pill(staff_user, mixer):
 @pytest.fixture
 def comment(user, pill, mixer):
     return mixer.blend(Comment, pill=pill, author=user)
+
+
+@pytest.fixture
+def pillbox(user, pill, mixer):
+    return mixer.blend(Pillbox, pill=pill, user=user, is_active=True)
 
 
 @pytest.fixture
@@ -127,6 +133,11 @@ def profile_url(user):
 
 
 @pytest.fixture
+def edit_profile_url():
+    return reverse('pillbox:edit_profile')
+
+
+@pytest.fixture
 def edit_comment_url(comment):
     return reverse('pillbox:edit_comment', args=(comment.pk, comment.pill.pk))
 
@@ -136,3 +147,18 @@ def delete_comment_url(comment):
     return reverse('pillbox:delete_comment', kwargs={
         'comment_id': comment.pk, 'pill_id': comment.pill.pk
     })
+
+
+@pytest.fixture
+def create_pillbox_url():
+    return reverse('pillbox:create_pillbox')
+
+
+@pytest.fixture
+def edit_pillbox_url(pillbox):
+    return reverse('pillbox:edit_pillbox', args=(pillbox.pk,))
+
+
+@pytest.fixture
+def delete_pillbox_url(pillbox):
+    return reverse('pillbox:delete_pillbox', args=(pillbox.pk,))

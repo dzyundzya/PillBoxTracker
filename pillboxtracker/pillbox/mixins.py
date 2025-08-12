@@ -15,7 +15,7 @@ class OnlyAdminMixin(LoginRequiredMixin):
 
 class OnlyAuthorPillboxMixin(LoginRequiredMixin):
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.username != self.kwargs.get('username'):
+        if self.request.user.is_staff or not self.request.user.is_authenticated:
             return redirect(
                 'pages:homepage',
             )
@@ -60,17 +60,10 @@ class UserSuccessUrlMixin:
         )
 
 
-class PillBoxMixin(LoginRequiredMixin, View):
+class PillBoxMixin(OnlyAuthorPillboxMixin, View):
     model = Pillbox
     template_name = 'pillbox/pillbox_create.html'
     pk_url_kwarg = 'pillbox_id'
-
-    def dispatch(self, request, *args, **kwargs):
-        if self.get_object().user != self.request.user:
-            return redirect(
-                'pages:homepage',
-            )
-        return super().dispatch(request, *args, **kwargs)
 
 
 class PillMixin(OnlyAdminMixin, View):
