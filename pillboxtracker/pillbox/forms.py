@@ -12,12 +12,11 @@ class PillForm(forms.ModelForm):
             'category', 'is_published',
         )
         widgets = {
-            'pub_date': forms.DateTimeInput(
-                attrs={
-                    'type': 'datetime-local',
-                    'placeholder': 'Выберите дату и время публикации'
-                }
-            ),
+            # 'pub_date': forms.DateTimeInput(
+            #     attrs={
+            #         'type': 'datetime-local',
+            #     }
+            # ),
             'description': forms.Textarea(
                 attrs={
                     'rows': 10, 'cols': 10,

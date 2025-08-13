@@ -12,7 +12,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'DEFAULT_KEY')
 
 DEBUG = os.getenv('DEBUG', 'False')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1, localhost').split(', ')
 
 INTERNAL_IPS = [ '127.0.0.1', ]
 
@@ -63,13 +63,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pillboxtracker.wsgi.application'
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'project18'),
+        'USER': os.getenv('POSTGRES_USER', 'project18'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -98,6 +102,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'collected_static'
 
 STATICFILES_DIRS = [BASE_DIR / 'static', ]
 

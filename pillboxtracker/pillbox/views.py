@@ -42,7 +42,7 @@ class PillDetailView(DetailView):
         return context
 
 
-class PillCreateView(PillSuccessUrlMixin, OnlyAdminMixin, CreateView):
+class PillCreateView(OnlyAdminMixin, CreateView):
     """
     Представление для создание нового препарата.
 

@@ -65,8 +65,14 @@ def test_comments_ordering(user_client, few_comments, pill_detail_url):
 )
 def test_another_user_has_form(reverse_url, parametrized_client, forms):
     response = parametrized_client.get(reverse_url)
-    assert 'form' in response.context
-    assert isinstance(response.context['form'], forms)
+    assert 'form' in response.context, (
+        f"Форма отсутствует в контексте для URL: {reverse_url}. "
+        f"Клиент: {response.wsgi_request.user.username}"
+    )
+    assert isinstance(response.context['form'], forms), (
+        f"Неверный тип формы для URL: {reverse_url}. "
+        f"Клиент: {response.wsgi_request.user.username}"
+    )
 
 
 @pytest.mark.parametrize(
@@ -82,6 +88,9 @@ def test_another_user_has_form(reverse_url, parametrized_client, forms):
         (lf('edit_comment_url'), lf('unlogged_client')),
     )
 )
-def test_anonymous_has_not_form(reverse_url, parametrized_client):
+def test_another_user_has_not_form(reverse_url, parametrized_client):
     response = parametrized_client.get(reverse_url)
-    assert 'form' not in response.context
+    assert 'form' not in response.context, (
+        f"Форма присутствует в контексте для URL: {reverse_url}. "
+        f"Клиент: {response.wsgi_request.user.username}"
+    )

@@ -22,7 +22,8 @@ class Pill(GeneralModel):
     )
     description = models.TextField('Описание')
     pub_date = models.DateTimeField(
-        'Дата и время публикации', help_text=const.HELP_TEXT.PUB_DATE
+        'Дата и время публикации', help_text=const.HELP_TEXT.PUB_DATE,
+        default=timezone.now,
     )
     manufacturer = models.ForeignKey(
         'Manufacturer', on_delete=models.SET_NULL, null=True,
