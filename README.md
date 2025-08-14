@@ -38,20 +38,58 @@
 
 ## Интерфейс проекта
 
+`Логин, о проекте, правила:`
 <p float="left">
   <img src="README_images/login.png" width="33%" />
   <img src="README_images/about.png" width="25%" />
   <img src="README_images/rules.png" width="29%" />
 </p>
 
+`Интерфейс создания, редактирования и удаления препарата:`
+<p float="left">
+  <img src="README_images/detail_pill.png" width="25%" />
+  <img src="README_images/create_pill.png" width="20%" />
+  <img src="README_images/edit_pill.png" width="21%" />
+  <img src="README_images/delete_pill.png" width="23%" />
+</p>
+
+`Интерфейс создания, редактирования и удаления таблеточницы:`
+<p float="left">
+  <img src="README_images/detail_pillbox.png" width="33%" />
+  <img src="README_images/create_pillbox.png" width="20%" />
+  <img src="README_images/edit_pillbox.png" width="20%" />
+  <img src="README_images/delete_pillbox.png" width="25%" />
+</p>
+
+`Интерфейс комментария:`
+<p float="left">
+  <img src="README_images/detail_comment.png" width="25%" />
+  <img src="README_images/edit_comment.png" width="30%" />
+  <img src="README_images/delete_comment.png" width="35%" />
+</p>
+
+`Интерфейс страницы администратора и пользователя:`
+<p float="left">
+  <img src="README_images/admin_detail.png" width="32%" />
+  <img src="README_images/user_detail.png" width="30%" />
+</p>
+
+`Работа уведомлений телеграм-бота:`
+<p float="left">
+  <img src="README_images/before.png" width="32%" />
+  <img src="README_images/bot.jpg" width="15%" />
+  <img src="README_images/after.png" width="32%" />
+</p>
+
+
 ## Как запустить
-- $ pip install -r requirements.txt
-- $ python manage.py migrate
-- $ python manage.py createsuperuser
-- $ python manage.py runserver
+- `$ pip install -r requirements.txt`
+- `$ python manage.py migrate`
+- `$ python manage.py createsuperuser`
+- `$ python manage.py runserver`
 ---
-- $ celery -A pillboxtracker worker -l info --pool=threads --concurrency=4
-- $ celery -A pillboxtracker beat -l info
+- `$ celery -A pillboxtracker worker -l info --pool=threads --concurrency=4`
+- `$ celery -A pillboxtracker beat -l info`
 
 
 
