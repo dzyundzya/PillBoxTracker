@@ -45,6 +45,7 @@
   <img src="README_images/rules.png" width="29%" />
 </p>
 <hr>
+
 `Интерфейс создания, редактирования и удаления препарата:`
 <p float="left">
   <img src="README_images/detail_pill.png" width="25%" />
@@ -53,6 +54,7 @@
   <img src="README_images/delete_pill.png" width="23%" />
 </p>
 <hr>
+
 `Интерфейс создания, редактирования и удаления таблеточницы:`
 <p float="left">
   <img src="README_images/detail_pillbox.png" width="33%" />
@@ -61,6 +63,7 @@
   <img src="README_images/delete_pillbox.png" width="25%" />
 </p>
 <hr>
+
 `Интерфейс комментария:`
 <p float="left">
   <img src="README_images/detail_comment.png" width="25%" />
@@ -68,12 +71,14 @@
   <img src="README_images/delete_comment.png" width="35%" />
 </p>
 <hr>
+
 `Интерфейс страницы администратора и пользователя:`
 <p float="left">
   <img src="README_images/admin_detail.png" width="32%" />
   <img src="README_images/user_detail.png" width="30%" />
 </p>
 <hr>
+
 `Работа уведомлений телеграм-бота:`
 <p float="left">
   <img src="README_images/before.png" width="32%" />
