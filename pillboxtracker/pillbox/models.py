@@ -98,10 +98,17 @@ class ActiveSubstance(GeneralModel):
 class Manufacturer(GeneralModel):
     name = models.CharField('Название', max_length=const.MAX_LENGTH.NAME)
     country = models.CharField('Страна', max_length=const.MAX_LENGTH.COUNTRY)
+    slug = models.SlugField(unique=True, null=True)
 
     class Meta:
         verbose_name = 'производитель'
         verbose_name_plural = 'Производители'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'slug'],
+                name='unique_manufacturer'
+            )
+        ]
 
     def __str__(self):
         return self.name
