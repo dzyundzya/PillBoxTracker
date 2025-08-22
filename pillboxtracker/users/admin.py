@@ -12,7 +12,7 @@ class CustomUserAdmin(admin.ModelAdmin):
         ('first_name', 'last_name', 'telegram_chat_id'),
         ('birthday', 'gender',),
         ('bio',),
-        ('password',)
+        ('password', 'is_staff')
     )
 
 

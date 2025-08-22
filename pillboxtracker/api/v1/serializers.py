@@ -1,10 +1,21 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from pillbox.models import ActiveSubstance, Category, Pill, Manufacturer, MedicineForm
-
+from pillbox.models import (
+    ActiveSubstance, Category, Comment, Pill, Manufacturer, MedicineForm
+)
 
 User = get_user_model()
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        slug_field='username', read_only=True
+    )
+
+    class Meta:
+        model = Comment
+        fields = ('id', 'text', 'author', 'created_at')
 
 
 class ActiveSubstanceSerializer(serializers.ModelSerializer):
