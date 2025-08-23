@@ -19,6 +19,10 @@ v1_router.register(
 v1_router.register(
     r'pills/(?P<pill_id>\d+)/comments', views.CommentViewSet, basename='comments'
 )
+v1_router.register(
+    r'reminder-time', views.ReminderTimeViewSet, basename='reminder-time'
+)
+v1_router.register(r'pillboxes', views.PillBoxViewSet, basename='pillboxes')
 
 
 urlpatterns = [

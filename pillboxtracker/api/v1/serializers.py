@@ -3,10 +3,49 @@ from djoser.serializers import UserSerializer
 from rest_framework import serializers
 
 from pillbox.models import (
-    ActiveSubstance, Category, Comment, Pill, Manufacturer, MedicineForm
+    ActiveSubstance, Category, Comment, Pill, Manufacturer, MedicineForm, ReminderTime, Pillbox
 )
 
 User = get_user_model()
+
+
+class ReminderTimeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReminderTime
+        fields = ('id', 'time',)
+
+
+class CreatePillBoxSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault()
+    )
+    reminder_time = serializers.SlugRelatedField(
+        slug_field='time', queryset=ReminderTime.objects.all(), many=True
+    )
+
+    class Meta:
+        model = Pillbox
+        fields = (
+            'id', 'pill', 'user', 'amount',
+            'daily_count', 'is_active', 'reminder_time',
+        )
+
+
+class ReadPillBoxSerializer(serializers.ModelSerializer):
+    pill = serializers.SlugRelatedField(
+        slug_field='name', read_only=True
+    )
+    user = serializers.SlugRelatedField(
+        slug_field='username', read_only=True
+    )
+    reminder_time = ReminderTimeSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = Pillbox
+        fields = (
+            'id', 'pill', 'user', 'amount', 'start_date',
+            'daily_count', 'is_active', 'reminder_time', 'remaining_days'
+        )
 
 
 class CustomUserSerializer(UserSerializer):
@@ -53,8 +92,8 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class CreatePillSerializer(serializers.ModelSerializer):
-    author = serializers.SlugRelatedField(
-        slug_field='username', read_only=True
+    author = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault()
     )
     active_substance = serializers.SlugRelatedField(
         slug_field='slug', queryset=ActiveSubstance.objects.all(),
