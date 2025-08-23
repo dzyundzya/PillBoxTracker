@@ -1,3 +1,5 @@
+from django.contrib.auth import get_user_model
+from djoser.views import UserViewSet
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 
@@ -5,8 +7,16 @@ from pillbox.models import ActiveSubstance, Category, Pill, Manufacturer, Medici
 from .permissions import IsAdmiOrReadOnly
 from .serializers import (
     ActiveSubstanceSerializer, CategorySerializer, CreatePillSerializer, CommentSerializer, ReadPillSerializer,
-    ManufacturerSerializers, MedicineFormSerializer,
+    ManufacturerSerializers, MedicineFormSerializer, CustomUserSerializer
 )
+
+
+User = get_user_model()
+
+
+class CustomUserViewSet(UserViewSet):
+    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
 
 
 class PillCommonViewSet(viewsets.ModelViewSet):

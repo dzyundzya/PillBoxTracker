@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from djoser.serializers import UserSerializer
 from rest_framework import serializers
 
 from pillbox.models import (
@@ -6,6 +7,15 @@ from pillbox.models import (
 )
 
 User = get_user_model()
+
+
+class CustomUserSerializer(UserSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id', 'username', 'email', 'first_name', 'last_name',
+            'telegram_chat_id', 'gender', 'bio', 'birthday'
+        )
 
 
 class CommentSerializer(serializers.ModelSerializer):
