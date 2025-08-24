@@ -3,7 +3,8 @@ from djoser.serializers import UserSerializer
 from rest_framework import serializers
 
 from pillbox.models import (
-    ActiveSubstance, Category, Comment, Pill, Manufacturer, MedicineForm, ReminderTime, Pillbox
+    ActiveSubstance, Category, Comment, Manufacturer,
+    MedicineForm, Pill, Pillbox, ReminderTime
 )
 
 User = get_user_model()

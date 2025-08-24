@@ -1,14 +1,18 @@
 from django.contrib.auth import get_user_model
 from djoser.views import UserViewSet
-from rest_framework import viewsets
+from rest_framework import pagination, viewsets
 from rest_framework.generics import get_object_or_404
 
-from pillbox.models import ActiveSubstance, Category, Pill, Manufacturer, MedicineForm, ReminderTime, Pillbox
+from pillbox.models import (
+    ActiveSubstance, Category, Manufacturer,
+    MedicineForm, Pill, Pillbox, ReminderTime
+)
 from .permissions import IsAdmiOrReadOnly
 from .serializers import (
-    ActiveSubstanceSerializer, CategorySerializer, CreatePillSerializer, CommentSerializer, ReadPillSerializer,
-    ManufacturerSerializers, MedicineFormSerializer, CustomUserSerializer, ReminderTimeSerializer,
-    CreatePillBoxSerializer, ReadPillBoxSerializer
+    ActiveSubstanceSerializer, CategorySerializer, CommentSerializer,
+    CreatePillBoxSerializer, CreatePillSerializer, CustomUserSerializer,
+    ManufacturerSerializers, MedicineFormSerializer, ReadPillBoxSerializer,
+    ReadPillSerializer, ReminderTimeSerializer
 )
 
 
@@ -18,15 +22,18 @@ User = get_user_model()
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
+    pagination_class = pagination.LimitOffsetPagination
 
 
 class PillCommonViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdmiOrReadOnly,)
     http_method_names = ['get', 'post', 'patch', 'delete']
+    pagination_class = pagination.LimitOffsetPagination
 
 
 class PillBoxViewSet(viewsets.ModelViewSet):
     queryset = Pillbox.objects.filter(is_active=True)
+    pagination_class = pagination.LimitOffsetPagination
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -45,6 +52,7 @@ class ReminderTimeViewSet(PillCommonViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
+    pagination_class = pagination.LimitOffsetPagination
 
     def get_pill(self):
         return get_object_or_404(Pill, id=self.kwargs.get('pill_id'))

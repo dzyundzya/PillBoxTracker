@@ -14,10 +14,12 @@ v1_router.register(
     r'manufacturer', views.ManufacturerViewSet, basename='manufacturer'
 )
 v1_router.register(
-    r'active-substance', views.ActiveSubstanceViewSet, basename='active-substance'
+    r'active-substance', views.ActiveSubstanceViewSet,
+    basename='active-substance'
 )
 v1_router.register(
-    r'pills/(?P<pill_id>\d+)/comments', views.CommentViewSet, basename='comments'
+    r'pills/(?P<pill_id>\d+)/comments', views.CommentViewSet,
+    basename='comments'
 )
 v1_router.register(
     r'reminder-time', views.ReminderTimeViewSet, basename='reminder-time'
