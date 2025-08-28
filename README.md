@@ -1,4 +1,4 @@
-# [Создание платформера на Python, используя pygame](https://github.com/dzyundzya/platformer_pygame)
+# [Таблетница - трекер приема препаратов](https://github.com/dzyundzya/PillBoxTracker)
 
 ![Static Badge](https://img.shields.io/badge/author-Dzyundzya%20Alexandr-red
 )
